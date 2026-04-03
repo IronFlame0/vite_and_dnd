@@ -1,73 +1,40 @@
-# React + TypeScript + Vite
+![Image](https://github.com/user-attachments/assets/4e4d611a-dffa-4277-baaa-1718e6d0d35b)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Vite + React + Drag and Drop
 
-Currently, two official plugins are available:
+An interactive demo built with React and TypeScript on Vite, showcasing native HTML5 drag-and-drop. Create colored blocks and freely drag them across the viewport — including across separate browser windows.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- Create blocks with random colors and positions via a button click
+- Drag blocks anywhere within the viewport using native HTML5 DnD
+- Cross-window drag-and-drop: drop a block from one browser window into another
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## Tech Stack
 
-## Expanding the ESLint configuration
+- **React 19** with TypeScript
+- **Vite** (via `rolldown-vite`) with `@vitejs/plugin-react-swc` for fast HMR
+- **ESLint** with typescript-eslint and react-hooks rules
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Other scripts:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Command | Description |
+|---|---|
+| `npm run build` | Type-check and bundle for production |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | Lint all TypeScript files |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## How It Works
+
+All drag-and-drop logic lives in `src/App.tsx`:
+
+1. **Create** — clicking the button spawns a block at a random position with a random HSL color.
+2. **Drag** — `onDragStart` records the cursor offset inside the block and writes the block's `id` and `color` to `DataTransfer`.
+3. **Drop** — `onDrop` reads the transferred data. If the block exists in state it moves it; if it came from another window it creates a new block at the drop position.
